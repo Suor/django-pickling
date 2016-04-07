@@ -3,7 +3,10 @@ __version__ = '.'.join(map(str, VERSION))
 
 
 from django.db.models import Model
-from itertools import izip
+try:
+    from itertools import izip
+except ImportError:
+    izip = zip
 
 
 def attnames(cls, _cache={}):
