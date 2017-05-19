@@ -23,14 +23,14 @@ def model_unpickle(cls, data):
 model_unpickle.__safe_for_unpickle__ = True
 
 def Model__reduce__(self):
-    if self._deferred:
-        return original_Model__reduce__(self)
-    else:
-        cls = self.__class__
+    cls = self.__class__
+    try:
         data = self.__dict__.copy()
-
         vector = [data.pop(name) for name in attnames(cls)]
         return (model_unpickle, (cls, vector), data)
+    except KeyError:
+        # data.pop() raises when some attnames are deferred
+        return original_Model__reduce__(self)
 
 if Model.__reduce__ != Model__reduce__:
     original_Model__reduce__ = Model.__reduce__
