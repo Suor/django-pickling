@@ -36,4 +36,3 @@ if Model.__reduce__ != Model__reduce__:
     original_Model__reduce__ = Model.__reduce__
     Model.__reduce__ = Model__reduce__
     del Model.__setstate__  # Drop django version check
-
