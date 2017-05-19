@@ -11,7 +11,7 @@ pytestmark = pytest.mark.django_db
 
 
 @pytest.mark.django_db
-@pytest.fixture(scope='session')
+@pytest.fixture
 def post():
     return Post.objects.create(title='Pickling')
 
@@ -25,3 +25,9 @@ def test_packed(post):
     stored = pickle.dumps(post)
     assert b'model_unpickle' in stored  # Our unpickling function is used
     assert b'title' not in stored       # Attributes are packed
+
+
+def test_deferred(post):
+    p = Post.objects.defer('title').get(pk=post.pk)
+    restored = pickle.loads(pickle.dumps(p, -1))
+    assert restored == p
