@@ -14,7 +14,7 @@ def attnames(cls, _cache={}):
     try:
         return _cache[cls]
     except KeyError:
-        _cache[cls] = tuple(f.attname for f in cls._meta.fields)
+        _cache[cls] = tuple(sorted(f.attname for f in cls._meta.fields))
         return _cache[cls]
 
 

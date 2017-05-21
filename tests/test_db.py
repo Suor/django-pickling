@@ -38,3 +38,13 @@ def test_deferred(post):
     p = Post.objects.defer('title').get(pk=post.pk)
     restored = pickle.loads(pickle.dumps(p, -1))
     assert restored == p
+
+
+def test_field_swap(post):
+    stored = pickle.dumps(post, -1)
+    Post._meta.fields = Post._meta.fields[::-1]
+    # Drop attnames cache
+    from django_pickling import attnames
+    attnames.__defaults__[0].pop(Post)
+
+    assert pickle.loads(stored) == post
