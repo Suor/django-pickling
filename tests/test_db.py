@@ -27,6 +27,13 @@ def test_packed(post):
     assert b'title' not in stored       # Attributes are packed
 
 
+def test_state_packed(post):
+    stored = pickle.dumps(post)
+    assert b'_state' not in stored
+    assert b'db' not in stored
+    assert b'adding' not in stored
+
+
 def test_deferred(post):
     p = Post.objects.defer('title').get(pk=post.pk)
     restored = pickle.loads(pickle.dumps(p, -1))
