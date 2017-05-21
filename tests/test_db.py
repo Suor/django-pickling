@@ -28,7 +28,7 @@ def test_packed(post):
 
 
 def test_state_packed(post):
-    stored = pickle.dumps(post)
+    stored = pickle.dumps(post, -1)
     assert b'_state' not in stored
     assert b'db' not in stored
     assert b'adding' not in stored
