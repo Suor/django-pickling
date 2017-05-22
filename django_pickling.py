@@ -3,6 +3,7 @@ __version__ = '.'.join(map(str, VERSION))
 
 
 from django.apps import apps
+from django.conf import settings
 from django.db.models import Model
 from django.db.models.base import ModelState
 try:
@@ -23,6 +24,9 @@ def model_unpickle(model, vector, db, adding, _cache={}):
     try:
         cls = _cache[model]
     except KeyError:
+        # Only needed in Django 1.8 and 1.9
+        if not apps.ready:
+            apps.populate(settings.INSTALLED_APPS)
         cls = _cache[model] = apps.get_model(*model.split('.'))
     obj = cls.__new__(cls)
     obj.__dict__.update(izip(attnames(cls), vector))
