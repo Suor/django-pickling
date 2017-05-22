@@ -2,6 +2,7 @@ VERSION = (0, 2)
 __version__ = '.'.join(map(str, VERSION))
 
 
+from django.apps import apps
 from django.db.models import Model
 from django.db.models.base import ModelState
 try:
@@ -18,7 +19,11 @@ def attnames(cls, _cache={}):
         return _cache[cls]
 
 
-def model_unpickle(cls, vector, db, adding):
+def model_unpickle(model, vector, db, adding, _cache={}):
+    try:
+        cls = _cache[model]
+    except KeyError:
+        cls = _cache[model] = apps.get_model(*model.split('.'))
     obj = cls.__new__(cls)
     obj.__dict__.update(izip(attnames(cls), vector))
 
@@ -32,11 +37,17 @@ model_unpickle.__safe_for_unpickle__ = True
 
 def Model__reduce__(self):
     cls = self.__class__
+    opts = cls._meta
+    # We do not pickle class but its identifier to work with dynamic models like m2m through ones
+    # We use concat instead of tuple to spead up loads at an expense of dumps
+    # This is the fastest way to concat here, formats are slower
+    model = opts.app_label + '.' + opts.object_name
     data = self.__dict__.copy()
     state = data.pop('_state')
     try:
+        # Popping all known attributes into vector, leaving the rest in data
         vector = tuple(data.pop(name) for name in attnames(cls))
-        return (model_unpickle, (cls, vector, state.db, state.adding), data)
+        return (model_unpickle, (model, vector, state.db, state.adding), data)
     except KeyError:
         # data.pop() raises when some attnames are deferred
         return original_Model__reduce__(self)
