@@ -5,3 +5,4 @@ build
 .cache
 .tox
 .benchmarks
+sqlite.db
