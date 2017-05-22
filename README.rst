@@ -16,3 +16,13 @@ Installation and setup
     $ pip install django-pickling
 
 Then add ``django_pickling`` to your ``INSTALLED_APPS``.
+
+
+CAVEATS
+-------
+
+1. No Django version checks are performed.
+2. If fields list changes you will see TypeErrors instead of AttributeErrors.
+
+In both cases you should wipe your cache or change keys. Note that you will need to deal with this anyway, with django_pickling you'll just get weirder errors.
+
