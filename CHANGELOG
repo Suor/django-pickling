@@ -1,3 +1,11 @@
+1.0
+- support Django 1.10 and 1.11
+- support Python 3, really
+- more optimizations on size and time
+- fixed pickling dynamic models like m2m through
+- do not break on fields changing positions
+- no django version check warning
+
 0.2
 - support Python 3
 

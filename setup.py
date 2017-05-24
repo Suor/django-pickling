@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='django-pickling',
-    version='0.2',
+    version='1.0',
     author='Alexander Schepanovski',
     author_email='suor.web@gmail.com',
 
@@ -15,9 +15,10 @@ setup(
     install_requires=['django'],
 
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
+
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
