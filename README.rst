@@ -28,3 +28,4 @@ In both cases you should wipe your cache or change keys.
 Note that you will need to deal with this anyway,
 with django-pickling you'll just get weirder errors.
 
+Another thing is that objects with deferred fields are not optimized.
